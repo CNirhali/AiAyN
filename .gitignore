@@ -13,6 +13,24 @@ build/
 .env.production.local
 *.env*
 
+# Secrets and Keys
+*.pem
+*.key
+*.pub
+*.cert
+*.p12
+*.pfx
+secrets.json
+credentials.json
+
+# Databases
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
