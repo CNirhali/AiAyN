@@ -22,6 +22,9 @@ build/
 *.pfx
 secrets.json
 credentials.json
+.npmrc
+.netrc
+*.secret
 
 # Databases
 *.sqlite
@@ -44,6 +47,12 @@ pnpm-debug.log*
 *.swp
 *.swo
 .DS_Store
+
+# Backups and temporary files
+*.bak
+*.old
+*.orig
+*~
 
 # Python
 __pycache__/
