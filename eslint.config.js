@@ -29,6 +29,12 @@ module.exports = [
         ...globals.node,
       },
     },
+    rules: {
+      // Harden against code injection by disallowing dynamic code execution
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
+      'no-new-func': 'error',
+    },
   },
 
   // 4. Ignores: Skip non-essential files
