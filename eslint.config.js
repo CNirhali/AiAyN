@@ -34,6 +34,13 @@ module.exports = [
       'no-eval': 'error',
       'no-implied-eval': 'error',
       'no-new-func': 'error',
+
+      // Prevent common JavaScript pitfalls that could lead to logic errors or security gaps
+      'no-unsafe-finally': 'error',
+      'no-unsafe-negation': 'error',
+
+      // Specific security-focused rules for prototype pollution and object injection
+      'security/detect-object-injection': 'warn',
     },
   },
 
