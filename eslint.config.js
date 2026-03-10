@@ -40,7 +40,10 @@ module.exports = [
       'no-unsafe-negation': 'error',
 
       // Specific security-focused rules for prototype pollution and object injection
-      'security/detect-object-injection': 'warn',
+      'security/detect-object-injection': 'error',
+
+      // Prevent Trojan Source attacks by disallowing bidirectional control characters
+      'security/detect-bidi-characters': 'error',
     },
   },
 
