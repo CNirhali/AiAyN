@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint .",
     "test": "vitest run",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "audit": "pnpm audit"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
