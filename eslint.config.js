@@ -44,6 +44,21 @@ module.exports = [
 
       // Prevent Trojan Source attacks by disallowing bidirectional control characters
       'security/detect-bidi-characters': 'error',
+
+      // Harden against Regular Expression Denial of Service (ReDoS)
+      'security/detect-unsafe-regex': 'error',
+
+      // Prevent command injection by flagging child_process usage with non-literals
+      'security/detect-child-process': 'error',
+
+      // Flag eval() with expressions to prevent code injection
+      'security/detect-eval-with-expression': 'error',
+
+      // Prevent Remote Code Execution (RCE) via non-literal require() calls
+      'security/detect-non-literal-require': 'error',
+
+      // Mitigate path traversal by flagging non-literal file paths in fs operations
+      'security/detect-non-literal-fs-filename': 'error',
     },
   },
 
