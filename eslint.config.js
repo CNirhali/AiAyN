@@ -59,6 +59,18 @@ module.exports = [
 
       // Mitigate path traversal by flagging non-literal file paths in fs operations
       'security/detect-non-literal-fs-filename': 'error',
+
+      // Prevent insecure comparisons that could leak info via timing
+      'security/detect-possible-timing-attacks': 'error',
+
+      // Mitigate ReDoS by flagging non-literal values in RegExp constructor
+      'security/detect-non-literal-regexp': 'error',
+
+      // Prevent out-of-bounds writes in Buffer operations
+      'security/detect-buffer-noassert': 'error',
+
+      // Prevent use of deprecated and unsafe new Buffer()
+      'security/detect-new-buffer': 'error',
     },
   },
 

@@ -12,3 +12,8 @@
 **Vulnerability:** The CI workflow contained GitHub Action references pinned to commit SHAs that did not correspond to any known official releases, accompanied by misleading version comments (e.g., `checkout@v6.0.2` when the latest major is `v4`). This is a high-risk supply chain vulnerability.
 **Learning:** Never trust SHAs or version numbers in CI/CD configurations without verifying them against official repository releases. Hallucinated or maliciously injected SHAs can execute arbitrary code in the CI environment.
 **Prevention:** Always verify commit SHAs against official tags/releases on the action's primary repository. Use tools or manual verification to ensure that the pinned SHA is a verified, signed commit from the official maintainers.
+
+## 2025-03-05 - Nuanced Security Rule Enforcement in Tests
+**Vulnerability:** Programmatic security tests (`security.test.js`) could falsely pass if the "insecure" code snippets don't match the specific heuristic patterns used by `eslint-plugin-security` (e.g., rules like `detect-non-literal-regexp` may only flag if the source is clearly non-literal, like `process.argv`).
+**Learning:** Security linters often use heuristic-based AST analysis that requires specific patterns to trigger. For instance, `detect-possible-timing-attacks` prioritizes comparisons inside `if` statements with security-sensitive variable names.
+**Prevention:** When writing security infrastructure tests, verify each rule's trigger requirements in the plugin source or documentation. Use robust triggers like `process.argv[2]` to guarantee detection of non-literal injection risks.
