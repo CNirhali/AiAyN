@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Security-hardened repository foundation",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "lint": "eslint .",
     "test": "vitest run",
@@ -11,7 +14,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,ts}": [
+    "*.{js,ts,cjs,mjs}": [
       "eslint --fix",
       "vitest run --related --passWithNoTests"
     ],
