@@ -38,6 +38,9 @@ module.exports = [
       // Prevent common JavaScript pitfalls that could lead to logic errors or security gaps
       'no-unsafe-finally': 'error',
       'no-unsafe-negation': 'error',
+      'no-caller': 'error',
+      'no-proto': 'error',
+      'no-delete-var': 'error',
 
       // Specific security-focused rules for prototype pollution and object injection
       'security/detect-object-injection': 'error',
@@ -71,6 +74,15 @@ module.exports = [
 
       // Prevent use of deprecated and unsafe new Buffer()
       'security/detect-new-buffer': 'error',
+
+      // Prevent use of cryptographically weak pseudo-random numbers
+      'security/detect-pseudoRandomBytes': 'error',
+
+      // Ensure CSRF protection is applied before method override
+      'security/detect-no-csrf-before-method-override': 'error',
+
+      // Prevent disabling of escape in mustache templates
+      'security/detect-disable-mustache-escape': 'error',
     },
   },
 
