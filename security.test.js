@@ -49,6 +49,32 @@ test('ESLint should catch critical security vulnerabilities as errors', async ()
     const obj2 = {};
     obj2.escapeMarkup = false;
 
+    // Trigger detect-non-literal-fs-filename
+    const fs = require('fs');
+    fs.readFileSync(process.argv[2]);
+
+    // Trigger detect-bidi-characters
+    const bidi = '\u202E';
+
+    // Trigger no-implied-eval
+    setTimeout("console.log(1)", 100);
+
+    // Trigger no-new-func
+    const fn = new Function('console.log(1)');
+
+    // Trigger no-unsafe-finally
+    function unsafeFinally() {
+      try {
+        console.log('try');
+      } finally {
+        return;
+      }
+    }
+    unsafeFinally();
+
+    // Trigger no-unsafe-negation
+    if (!'a' in {}) { console.log('negation'); }
+
     // Trigger core security rules
     console.log(arguments.caller);
     const myProto = obj.__proto__;
@@ -75,6 +101,12 @@ test('ESLint should catch critical security vulnerabilities as errors', async ()
   expect(errorRules).toContain('security/detect-pseudoRandomBytes');
   expect(errorRules).toContain('security/detect-no-csrf-before-method-override');
   expect(errorRules).toContain('security/detect-disable-mustache-escape');
+  expect(errorRules).toContain('security/detect-non-literal-fs-filename');
+  expect(errorRules).toContain('security/detect-bidi-characters');
+  expect(errorRules).toContain('no-implied-eval');
+  expect(errorRules).toContain('no-new-func');
+  expect(errorRules).toContain('no-unsafe-finally');
+  expect(errorRules).toContain('no-unsafe-negation');
   expect(errorRules).toContain('no-caller');
   expect(errorRules).toContain('no-proto');
 });
