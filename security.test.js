@@ -41,6 +41,10 @@ test('ESLint should catch critical security vulnerabilities as errors', async ()
     const crypto = require('crypto');
     crypto.pseudoRandomBytes(10);
 
+    // Trigger no-restricted-properties (Math.random)
+    const insecureRandom = Math.random();
+    console.log(insecureRandom);
+
     // Trigger detect-no-csrf-before-method-override
     express.csrf();
     express.methodOverride();
@@ -99,6 +103,7 @@ test('ESLint should catch critical security vulnerabilities as errors', async ()
   expect(errorRules).toContain('security/detect-object-injection');
   expect(errorRules).toContain('security/detect-non-literal-require');
   expect(errorRules).toContain('security/detect-pseudoRandomBytes');
+  expect(errorRules).toContain('no-restricted-properties');
   expect(errorRules).toContain('security/detect-no-csrf-before-method-override');
   expect(errorRules).toContain('security/detect-disable-mustache-escape');
   expect(errorRules).toContain('security/detect-non-literal-fs-filename');
