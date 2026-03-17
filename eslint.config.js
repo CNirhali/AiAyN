@@ -78,6 +78,16 @@ module.exports = [
       // Prevent use of cryptographically weak pseudo-random numbers
       'security/detect-pseudoRandomBytes': 'error',
 
+      // Prevent use of cryptographically weak random numbers
+      'no-restricted-properties': [
+        'error',
+        {
+          object: 'Math',
+          property: 'random',
+          message: 'Use crypto.randomBytes() or crypto.randomInt() for security-sensitive operations.',
+        },
+      ],
+
       // Ensure CSRF protection is applied before method override
       'security/detect-no-csrf-before-method-override': 'error',
 
