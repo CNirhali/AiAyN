@@ -91,6 +91,15 @@ module.exports = [
       // Ensure CSRF protection is applied before method override
       'security/detect-no-csrf-before-method-override': 'error',
 
+      // Prevent RCE via dynamic import() with non-literal paths
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ImportExpression[source.type!="Literal"]',
+          message: 'Dynamic imports with non-literal paths can lead to Remote Code Execution (RCE).',
+        },
+      ],
+
       // Prevent disabling of escape in mustache templates
       'security/detect-disable-mustache-escape': 'error',
     },
