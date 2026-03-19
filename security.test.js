@@ -49,6 +49,9 @@ test('ESLint should catch critical security vulnerabilities as errors', async ()
     express.csrf();
     express.methodOverride();
 
+    // Trigger no-restricted-syntax (dynamic import)
+    import(process.argv[2]);
+
     // Trigger detect-disable-mustache-escape
     const obj2 = {};
     obj2.escapeMarkup = false;
@@ -105,6 +108,7 @@ test('ESLint should catch critical security vulnerabilities as errors', async ()
   expect(errorRules).toContain('security/detect-pseudoRandomBytes');
   expect(errorRules).toContain('no-restricted-properties');
   expect(errorRules).toContain('security/detect-no-csrf-before-method-override');
+  expect(errorRules).toContain('no-restricted-syntax');
   expect(errorRules).toContain('security/detect-disable-mustache-escape');
   expect(errorRules).toContain('security/detect-non-literal-fs-filename');
   expect(errorRules).toContain('security/detect-bidi-characters');
