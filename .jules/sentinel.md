@@ -32,3 +32,8 @@
 **Vulnerability:** Dynamic `import()` calls with non-literal sources can allow an attacker to execute arbitrary code if they control the source string, leading to Remote Code Execution (RCE). The standard `eslint-plugin-security` (v4.0.0) does not detect this pattern.
 **Learning:** Security plugins may have gaps for modern JavaScript features like dynamic imports. Relying on generic security plugins is not enough; custom AST-based rules are necessary to catch modern injection vectors.
 **Prevention:** Use the core ESLint `no-restricted-syntax` rule with a selector like `ImportExpression[source.type!="Literal"]` to globally disallow non-literal dynamic imports. This ensures that all dynamic imports use hardcoded, trusted paths.
+
+## 2025-03-05 - Transitive Dependency Vulnerability Management
+**Vulnerability:** Transitive dependencies can contain vulnerabilities (e.g., Prototype Pollution in `flatted`) that are not directly visible in `package.json` but still expose the application to risk.
+**Learning:** Standard dependency updates may not always resolve vulnerabilities in deep dependency trees if the direct dependency's version range is too restrictive.
+**Prevention:** Use the `pnpm.overrides` (or `resolutions` in npm/yarn) field in `package.json` to explicitly force the use of patched versions for transitive dependencies. Always run `pnpm audit` regularly to detect these "hidden" risks.
