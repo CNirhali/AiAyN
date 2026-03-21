@@ -91,12 +91,16 @@ module.exports = [
       // Ensure CSRF protection is applied before method override
       'security/detect-no-csrf-before-method-override': 'error',
 
-      // Prevent RCE via dynamic import() with non-literal paths
+      // Prevent RCE via dynamic import() and insecure Buffer allocation
       'no-restricted-syntax': [
         'error',
         {
           selector: 'ImportExpression[source.type!="Literal"]',
           message: 'Dynamic imports with non-literal paths can lead to Remote Code Execution (RCE).',
+        },
+        {
+          selector: "CallExpression[callee.object.name='Buffer'][callee.property.name=/^allocUnsafe(Slow)?$/]",
+          message: 'Use Buffer.alloc() instead of Buffer.allocUnsafe() to ensure memory is zero-filled and prevent information leakage.',
         },
       ],
 

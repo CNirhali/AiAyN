@@ -52,6 +52,10 @@ test('ESLint should catch critical security vulnerabilities as errors', async ()
     // Trigger no-restricted-syntax (dynamic import)
     import(process.argv[2]);
 
+    // Trigger no-restricted-syntax (insecure Buffer allocation)
+    Buffer.allocUnsafe(10);
+    Buffer.allocUnsafeSlow(10);
+
     // Trigger detect-disable-mustache-escape
     const obj2 = {};
     obj2.escapeMarkup = false;
