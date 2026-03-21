@@ -37,3 +37,8 @@
 **Vulnerability:** Transitive dependencies can contain vulnerabilities (e.g., Prototype Pollution in `flatted`) that are not directly visible in `package.json` but still expose the application to risk.
 **Learning:** Standard dependency updates may not always resolve vulnerabilities in deep dependency trees if the direct dependency's version range is too restrictive.
 **Prevention:** Use the `pnpm.overrides` (or `resolutions` in npm/yarn) field in `package.json` to explicitly force the use of patched versions for transitive dependencies. Always run `pnpm audit` regularly to detect these "hidden" risks.
+
+## 2025-03-05 - Insecure Buffer Allocation Gap
+**Vulnerability:** `Buffer.allocUnsafe()` and `Buffer.allocUnsafeSlow()` allocate memory that is not zero-filled, which can contain sensitive data from previous allocations, leading to information disclosure.
+**Learning:** `eslint-plugin-security` (v4.0.0) does not explicitly flag these specific methods by default. Relying on "recommended" security plugins may miss specific Node.js API risks.
+**Prevention:** Use the core ESLint `no-restricted-syntax` rule with a selector like `CallExpression[callee.object.name='Buffer'][callee.property.name=/^allocUnsafe(Slow)?$/]` to globally disallow these insecure allocation methods in favor of `Buffer.alloc()`.
