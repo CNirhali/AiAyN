@@ -91,7 +91,7 @@ module.exports = [
       // Ensure CSRF protection is applied before method override
       'security/detect-no-csrf-before-method-override': 'error',
 
-      // Prevent RCE via dynamic import() and insecure Buffer allocation
+      // Prevent RCE via dynamic import() and insecure Buffer allocation, and disallow insecure APIs
       'no-restricted-syntax': [
         'error',
         {
@@ -101,6 +101,18 @@ module.exports = [
         {
           selector: "CallExpression[callee.object.name='Buffer'][callee.property.name=/^allocUnsafe(Slow)?$/]",
           message: 'Use Buffer.alloc() instead of Buffer.allocUnsafe() to ensure memory is zero-filled and prevent information leakage.',
+        },
+        {
+          selector: "CallExpression[callee.name='require'][arguments.0.value=/^(node:)?vm$/]",
+          message: 'The "vm" module is not a secure sandbox. Use "isolated-vm" or a separate process for untrusted code execution.',
+        },
+        {
+          selector: "ImportDeclaration[source.value=/^(node:)?vm$/]",
+          message: 'The "vm" module is not a secure sandbox. Use "isolated-vm" or a separate process for untrusted code execution.',
+        },
+        {
+          selector: "CallExpression[callee.object.name='crypto'][callee.property.name=/^create(De)?cipher$/]",
+          message: 'crypto.createCipher() and crypto.createDecipher() are deprecated and use insecure key derivation. Use crypto.createCipheriv() or crypto.createDecipheriv() instead.',
         },
       ],
 

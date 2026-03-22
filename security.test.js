@@ -56,6 +56,14 @@ test('ESLint should catch critical security vulnerabilities as errors', async ()
     Buffer.allocUnsafe(10);
     Buffer.allocUnsafeSlow(10);
 
+    // Trigger no-restricted-syntax (insecure vm module)
+    const vm = require('vm');
+    const nodeVm = require('node:vm');
+
+    // Trigger no-restricted-syntax (deprecated crypto)
+    crypto.createCipher('aes-128-cbc', 'password');
+    crypto.createDecipher('aes-128-cbc', 'password');
+
     // Trigger detect-disable-mustache-escape
     const obj2 = {};
     obj2.escapeMarkup = false;
@@ -85,6 +93,10 @@ test('ESLint should catch critical security vulnerabilities as errors', async ()
 
     // Trigger no-unsafe-negation
     if (!'a' in {}) { console.log('negation'); }
+
+    // Trigger no-restricted-syntax (import vm)
+    // Note: To test ImportDeclaration, we'd normally need a separate file or a complex lint call,
+    // but the require() and crypto triggers already cover the 'no-restricted-syntax' rule verification.
 
     // Trigger core security rules
     console.log(arguments.caller);

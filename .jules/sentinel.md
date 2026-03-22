@@ -42,3 +42,8 @@
 **Vulnerability:** `Buffer.allocUnsafe()` and `Buffer.allocUnsafeSlow()` allocate memory that is not zero-filled, which can contain sensitive data from previous allocations, leading to information disclosure.
 **Learning:** `eslint-plugin-security` (v4.0.0) does not explicitly flag these specific methods by default. Relying on "recommended" security plugins may miss specific Node.js API risks.
 **Prevention:** Use the core ESLint `no-restricted-syntax` rule with a selector like `CallExpression[callee.object.name='Buffer'][callee.property.name=/^allocUnsafe(Slow)?$/]` to globally disallow these insecure allocation methods in favor of `Buffer.alloc()`.
+
+## 2025-03-05 - Insecure Node.js Core API Restrictions
+**Vulnerability:** The Node.js `vm` module is often mistaken for a secure sandbox, but it can be easily escaped to execute arbitrary code on the host. Additionally, legacy `crypto.createCipher()` and `crypto.createDecipher()` use insecure, non-standard key derivation (MD5-based) and lack support for initialization vectors (IVs).
+**Learning:** Standard security plugins don't always block dangerous core modules or deprecated cryptographic functions. Explicitly restricting these via `no-restricted-syntax` ensures developers use secure alternatives.
+**Prevention:** Always disallow the `vm` module for untrusted code execution (use `isolated-vm` instead). Mandate the use of `crypto.createCipheriv()` and `crypto.createDecipheriv()` for all encryption tasks to ensure strong key derivation and IV usage.
