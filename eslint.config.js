@@ -115,28 +115,16 @@ module.exports = [
           message: 'crypto.createCipher() and crypto.createDecipher() are deprecated and use insecure key derivation. Use crypto.createCipheriv() or crypto.createDecipheriv() instead.',
         },
         {
-          selector: "CallExpression[callee.property.name=/^(spawn|spawnSync|execFile|execFileSync|execSync)$/][arguments.0.type!='Literal']",
-          message: 'Using non-literal arguments with child_process methods can lead to command injection. Ensure all arguments are sanitized or use literal values.',
+          selector:
+            "CallExpression:matches([callee.name=/^(spawn|spawnSync|execFile|execFileSync|execSync)$/], [callee.property.name=/^(spawn|spawnSync|execFile|execFileSync|execSync)$/])[arguments.0.type!='Literal']",
+          message:
+            'Using non-literal arguments with child_process methods can lead to command injection. Ensure all arguments are sanitized or use literal values.',
         },
         {
-          selector: "CallExpression[callee.name=/^(spawn|spawnSync|execFile|execFileSync|execSync)$/][arguments.0.type!='Literal']",
-          message: 'Using non-literal arguments with child_process methods can lead to command injection. Ensure all arguments are sanitized or use literal values.',
-        },
-        {
-          selector: "CallExpression[callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/][arguments.2.type='ObjectExpression'] Property[key.name='shell'][value.value=true]",
-          message: 'The "shell: true" option in child_process methods is dangerous as it executes the command in a shell, increasing the risk of command injection. Avoid using it with unsanitized input.',
-        },
-        {
-          selector: "CallExpression[callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/][arguments.2.type='ObjectExpression'] Property[key.name='shell'][value.value=true]",
-          message: 'The "shell: true" option in child_process methods is dangerous as it executes the command in a shell, increasing the risk of command injection. Avoid using it with unsanitized input.',
-        },
-        {
-          selector: "CallExpression[callee.property.name=/^(spawn|spawnSync|execSync|execFile|execFileSync)$/][arguments.1.type='ObjectExpression'] Property[key.name='shell'][value.value=true]",
-          message: 'The "shell: true" option in child_process methods is dangerous as it executes the command in a shell, increasing the risk of command injection. Avoid using it with unsanitized input.',
-        },
-        {
-          selector: "CallExpression[callee.name=/^(spawn|spawnSync|execSync|execFile|execFileSync)$/][arguments.1.type='ObjectExpression'] Property[key.name='shell'][value.value=true]",
-          message: 'The "shell: true" option in child_process methods is dangerous as it executes the command in a shell, increasing the risk of command injection. Avoid using it with unsanitized input.',
+          selector:
+            "CallExpression:matches([callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/]) ObjectExpression Property[key.name='shell'][value.value=true]",
+          message:
+            'The "shell: true" option in child_process methods is dangerous as it executes the command in a shell, increasing the risk of command injection. Avoid using it with unsanitized input.',
         },
       ],
 

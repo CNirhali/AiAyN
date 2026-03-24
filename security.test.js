@@ -41,6 +41,8 @@ test('ESLint should catch critical security vulnerabilities as errors', async ()
     execSync('ls', { shell: true });
     execFile('ls', [], { shell: true });
     execFileSync('ls', [], { shell: true });
+    require('child_process').exec('ls', { shell: true });
+    require('child_process').spawn('ls', [], { shell: true });
 
     // Trigger detect-object-injection
     const userKey = process.argv[2];
