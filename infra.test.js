@@ -1,5 +1,5 @@
-import { expect, test } from 'vitest'
+import { expect, test } from "vitest";
 
-test('security infra should be initialized', () => {
-  expect(true).toBe(true)
-})
+test("security infra should be initialized", () => {
+  expect(true).toBe(true);
+});
