@@ -108,6 +108,12 @@ module.exports = [
         },
         {
           selector:
+            "CallExpression:matches([callee.name='Buffer'], [callee.object.name='Buffer'][callee.property.name='Buffer'])",
+          message:
+            "The Buffer() constructor is deprecated and insecure. Use Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() instead.",
+        },
+        {
+          selector:
             "CallExpression[callee.name='require'][arguments.0.value=/^(node:)?vm$/]",
           message:
             'The "vm" module is not a secure sandbox. Use "isolated-vm" or a separate process for untrusted code execution.',
@@ -125,7 +131,7 @@ module.exports = [
         },
         {
           selector:
-            "CallExpression:matches([callee.name=/^(spawn|spawnSync|execFile|execFileSync|execSync)$/], [callee.property.name=/^(spawn|spawnSync|execFile|execFileSync|execSync)$/])[arguments.0.type!='Literal']",
+            "CallExpression:matches([callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/])[arguments.0.type!='Literal']",
           message:
             "Using non-literal arguments with child_process methods can lead to command injection. Ensure all arguments are sanitized or use literal values.",
         },

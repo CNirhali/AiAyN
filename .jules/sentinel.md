@@ -69,3 +69,9 @@
 **Vulnerability:** Custom `no-restricted-syntax` rules targeting property access (e.g., `CallExpression[callee.object.name='crypto'][callee.property.name='createCipher']`) can be easily bypassed by destructuring the method before calling it (e.g., `const { createCipher } = crypto; createCipher();`).
 **Learning:** AST selectors that rely on specific property access patterns are fragile. When a function is called directly after being destructured or aliased, it no longer matches the `callee.object` pattern.
 **Prevention:** Use the `:matches()` selector in `no-restricted-syntax` to cover both property access and direct calls by name. For example: `CallExpression:matches([callee.object.name='crypto'][callee.property.name='createCipher'], [callee.name='createCipher'])`. This ensures the rule triggers regardless of how the function is referenced.
+
+## 2025-03-05 - Insecure Buffer Constructor Gap
+
+**Vulnerability:** The `eslint-plugin-security` rule `detect-new-buffer` only flags `new Buffer()`, but the plain `Buffer()` call (without `new`) is also deprecated and carries similar security risks regarding uninitialized memory allocation.
+**Learning:** Security rules targeting specific AST nodes (like `NewExpression`) may miss identical functionality invoked via different syntax (like `CallExpression`). Plain function calls to constructors are a common bypass for such rules.
+**Prevention:** Always use `no-restricted-syntax` with `:matches([callee.name='Buffer'], [callee.object.name='Buffer'][callee.property.name='Buffer'])` to comprehensively block both `Buffer()` and `new Buffer()` calls.

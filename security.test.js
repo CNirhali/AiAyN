@@ -21,9 +21,10 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     const buf = Buffer.alloc(10);
     buf.writeUInt8(0x1, 0, true);
 
-    // Trigger detect-new-buffer
+    // Trigger detect-new-buffer and no-restricted-syntax (Buffer constructor)
     const oldBuf = new Buffer(process.argv[2]);
-    console.log(oldBuf);
+    const oldBuf2 = Buffer(process.argv[2]);
+    console.log(oldBuf, oldBuf2);
 
     // Trigger detect-child-process
     const { exec, spawn, spawnSync, execSync, execFile, execFileSync } = require('child_process');
