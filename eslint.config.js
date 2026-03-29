@@ -131,13 +131,13 @@ module.exports = [
         },
         {
           selector:
-            "CallExpression:matches([callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/])[arguments.0.type!='Literal']",
+            "CallExpression:matches([callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.value=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/])[arguments.0.type!='Literal']",
           message:
             "Using non-literal arguments with child_process methods can lead to command injection. Ensure all arguments are sanitized or use literal values.",
         },
         {
           selector:
-            "CallExpression:matches([callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/]) ObjectExpression Property[key.name='shell'][value.value=true]",
+            "CallExpression:matches([callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.value=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/]) > ObjectExpression > Property:matches([key.name='shell'], [key.value='shell'])[value.value=true]",
           message:
             'The "shell: true" option in child_process methods is dangerous as it executes the command in a shell, increasing the risk of command injection. Avoid using it with unsanitized input.',
         },

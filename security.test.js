@@ -26,7 +26,7 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     const oldBuf2 = Buffer(process.argv[2]);
     console.log(oldBuf, oldBuf2);
 
-    // Trigger detect-child-process
+    // Trigger detect-child-process and no-restricted-syntax (child_process hardening)
     const { exec, spawn, spawnSync, execSync, execFile, execFileSync } = require('child_process');
     exec(process.argv[2]);
     spawn(process.argv[2]);
@@ -34,6 +34,10 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     execSync(process.argv[2]);
     execFile(process.argv[2]);
     execFileSync(process.argv[2]);
+
+    // Computed property access
+    const cp = require('child_process');
+    cp['spawn'](process.argv[2]);
 
     // Trigger no-restricted-syntax (shell: true)
     spawn('ls', [], { shell: true });
@@ -44,6 +48,10 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     execFileSync('ls', [], { shell: true });
     require('child_process').exec('ls', { shell: true });
     require('child_process').spawn('ls', [], { shell: true });
+    spawn('ls', [], { ['shell']: true });
+
+    // Ensure no false positives for nested shell:true
+    spawn('ls', [], { options: { shell: true } });
 
     // Trigger detect-object-injection
     const userKey = process.argv[2];
