@@ -50,8 +50,17 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     require('child_process').spawn('ls', [], { shell: true });
     spawn('ls', [], { ['shell']: true });
 
+    // Ensure strings, template literals and identifiers are caught
+    spawn('ls', [], { shell: '/bin/bash' });
+    spawn('ls', [], { shell: \`/bin/sh\` });
+    const myShell = true;
+    spawn('ls', [], { shell: myShell });
+
     // Ensure no false positives for nested shell:true
     spawn('ls', [], { options: { shell: true } });
+
+    // Ensure no false positive for shell: false
+    spawn('ls', [], { shell: false });
 
     // Trigger detect-object-injection
     const userKey = process.argv[2];
