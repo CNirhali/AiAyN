@@ -46,6 +46,8 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     execSync('ls', { shell: true });
     execFile('ls', [], { shell: true });
     execFileSync('ls', [], { shell: true });
+    spawn('ls', [], { shell: '/bin/bash' });
+    spawnSync('ls', { shell: '/bin/bash' });
     require('child_process').exec('ls', { shell: true });
     require('child_process').spawn('ls', [], { shell: true });
     spawn('ls', [], { ['shell']: true });
