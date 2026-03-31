@@ -137,7 +137,6 @@ module.exports = [
         },
         {
           selector:
-            "CallExpression:matches([callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.value=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/]) > ObjectExpression > Property:matches([key.name='shell'], [key.value='shell']):matches([value.value=true], [value.type='Literal'][value.value!=false], [value.type='TemplateLiteral'])",
             "CallExpression:matches([callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.value=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/]) > ObjectExpression > Property:matches([key.name='shell'], [key.value='shell']):not([value.type='Literal'][value.value=false])",
           message:
             'The "shell" option in child_process methods is dangerous as it executes the command in a shell, increasing the risk of command injection. Avoid using it with unsanitized input.',
