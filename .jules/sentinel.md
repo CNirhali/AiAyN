@@ -75,3 +75,9 @@
 **Vulnerability:** The `eslint-plugin-security` rule `detect-new-buffer` only flags `new Buffer()`, but the plain `Buffer()` call (without `new`) is also deprecated and carries similar security risks regarding uninitialized memory allocation.
 **Learning:** Security rules targeting specific AST nodes (like `NewExpression`) may miss identical functionality invoked via different syntax (like `CallExpression`). Plain function calls to constructors are a common bypass for such rules.
 **Prevention:** Always use `no-restricted-syntax` with `:matches([callee.name='Buffer'], [callee.object.name='Buffer'][callee.property.name='Buffer'])` to comprehensively block both `Buffer()` and `new Buffer()` calls.
+
+## 2025-03-05 - Insecure Shell Option Bypass in child_process
+
+**Vulnerability:** The existing ESLint rule for `child_process` only flagged `shell: true`, allowing bypasses via string paths (e.g., `shell: '/bin/bash'`), template literals, or truthy identifiers, all of which enable shell execution and increase command injection risk.
+**Learning:** Node.js `child_process` methods interpret any truthy value for the `shell` option as enabling a shell. Static analysis rules that only check for a specific boolean literal are insufficient for security enforcement.
+**Prevention:** Use the `:not([value.type='Literal'][value.value=false])` selector in `no-restricted-syntax` to flag any usage of the `shell` option that isn't explicitly set to `false`. This ensures that any attempt to enable the shell—whether via boolean, string path, or variable—is scrutinized. Additionally, when testing these rules, ensure template literals are properly escaped in the test strings.
