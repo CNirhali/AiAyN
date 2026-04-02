@@ -90,6 +90,8 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
 
     // Trigger no-restricted-syntax (dynamic import)
     import(process.argv[2]);
+    import('vm');
+    import('node:vm');
 
     // Trigger no-restricted-syntax (insecure Buffer allocation)
     Buffer.allocUnsafe(10);
