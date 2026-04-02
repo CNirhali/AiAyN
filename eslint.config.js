@@ -131,15 +131,21 @@ module.exports = [
         },
         {
           selector:
-            "CallExpression:matches([callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.value=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/])[arguments.0.type!='Literal']",
+            "CallExpression:matches([callee.name=/^(spawn|spawnSync|fork|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|fork|exec|execSync|execFile|execFileSync)$/], [callee.property.value=/^(spawn|spawnSync|fork|exec|execSync|execFile|execFileSync)$/])[arguments.0.type!='Literal']",
           message:
             "Using non-literal arguments with child_process methods can lead to command injection. Ensure all arguments are sanitized or use literal values.",
         },
         {
           selector:
-            "CallExpression:matches([callee.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/], [callee.property.value=/^(spawn|spawnSync|exec|execSync|execFile|execFileSync)$/]) > ObjectExpression > Property:matches([key.name='shell'], [key.value='shell']):not([value.type='Literal'][value.value=false])",
+            "CallExpression:matches([callee.name=/^(spawn|spawnSync|fork|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|fork|exec|execSync|execFile|execFileSync)$/], [callee.property.value=/^(spawn|spawnSync|fork|exec|execSync|execFile|execFileSync)$/]) > ObjectExpression > Property:matches([key.name='shell'], [key.value='shell']):not([value.type='Literal'][value.value=false])",
           message:
             'The "shell" option in child_process methods is dangerous as it executes the command in a shell, increasing the risk of command injection. Avoid using it with unsanitized input.',
+        },
+        {
+          selector:
+            "VariableDeclarator[id.type='ObjectPattern'] > ObjectPattern > Property:matches([key.name='random'], [key.value='random'])[parent.parent.init.name='Math']",
+          message:
+            "Destructuring 'random' from 'Math' is discouraged as it is a cryptographically weak PRNG. Use crypto.randomBytes() or crypto.randomInt() for security-sensitive operations.",
         },
       ],
 
