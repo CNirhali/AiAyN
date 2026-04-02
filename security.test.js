@@ -27,10 +27,11 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     console.log(oldBuf, oldBuf2);
 
     // Trigger detect-child-process and no-restricted-syntax (child_process hardening)
-    const { exec, spawn, spawnSync, execSync, execFile, execFileSync } = require('child_process');
+    const { exec, spawn, spawnSync, fork, execSync, execFile, execFileSync } = require('child_process');
     exec(process.argv[2]);
     spawn(process.argv[2]);
     spawnSync(process.argv[2]);
+    fork(process.argv[2]);
     execSync(process.argv[2]);
     execFile(process.argv[2]);
     execFileSync(process.argv[2]);
@@ -38,10 +39,12 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     // Computed property access
     const cp = require('child_process');
     cp['spawn'](process.argv[2]);
+    cp['fork'](process.argv[2]);
 
     // Trigger no-restricted-syntax (shell: true)
     spawn('ls', [], { shell: true });
     spawnSync('ls', { shell: true });
+    fork('ls', { shell: true });
     exec('ls', { shell: true });
     execSync('ls', { shell: true });
     execFile('ls', [], { shell: true });
@@ -78,7 +81,8 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
 
     // Trigger no-restricted-properties (Math.random)
     const insecureRandom = Math.random();
-    console.log(insecureRandom);
+    const { random } = Math;
+    console.log(insecureRandom, random);
 
     // Trigger detect-no-csrf-before-method-override
     express.csrf();
