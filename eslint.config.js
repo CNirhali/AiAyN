@@ -102,6 +102,12 @@ module.exports = [
         },
         {
           selector:
+            "ImportExpression > Literal:matches([value=/^(node:)?vm$/])",
+          message:
+            'The "vm" module is not a secure sandbox. Use "isolated-vm" or a separate process for untrusted code execution.',
+        },
+        {
+          selector:
             "CallExpression:matches([callee.object.name='Buffer'][callee.property.name=/^allocUnsafe(Slow)?$/], [callee.name='allocUnsafe'], [callee.name='allocUnsafeSlow'])",
           message:
             "Use Buffer.alloc() instead of Buffer.allocUnsafe() to ensure memory is zero-filled and prevent information leakage.",
