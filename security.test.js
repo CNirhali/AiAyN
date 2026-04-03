@@ -88,6 +88,15 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     express.csrf();
     express.methodOverride();
 
+    // Trigger no-restricted-syntax (SSRF)
+    fetch(process.argv[2]);
+    http.get(process.argv[2]);
+    http.request(process.argv[2]);
+    https.get(process.argv[2]);
+    https.request(process.argv[2]);
+    http['get'](process.argv[2]);
+    fetch(\`https://example.com\`); // Safe TemplateLiteral, should NOT trigger
+
     // Trigger no-restricted-syntax (dynamic import)
     import(process.argv[2]);
     import('vm');
