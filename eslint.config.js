@@ -153,6 +153,12 @@ module.exports = [
           message:
             "Destructuring 'random' from 'Math' is discouraged as it is a cryptographically weak PRNG. Use crypto.randomBytes() or crypto.randomInt() for security-sensitive operations.",
         },
+        {
+          selector:
+            "CallExpression:matches([callee.name='fetch'], [callee.object.name=/^(http|https|node:http|node:https)$/][callee.property.name=/^(get|request)$/], [callee.object.name=/^(http|https|node:http|node:https)$/][callee.property.value=/^(get|request)$/])[arguments.0.type!='Literal']:not([arguments.0.type='TemplateLiteral'][arguments.0.expressions.length=0])",
+          message:
+            "Using non-literal arguments with fetch or http/https methods can lead to Server-Side Request Forgery (SSRF). Ensure all URLs are sanitized or use literal values.",
+        },
       ],
 
       // Prevent disabling of escape in mustache templates
