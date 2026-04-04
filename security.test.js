@@ -94,8 +94,22 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     http.request(process.argv[2]);
     https.get(process.argv[2]);
     https.request(process.argv[2]);
+    http2.connect(process.argv[2]);
     http['get'](process.argv[2]);
     fetch(\`https://example.com\`); // Safe TemplateLiteral, should NOT trigger
+
+    // Trigger no-restricted-syntax (insecure hashing)
+    crypto.createHash('md5');
+    crypto.createHash('sha1');
+    crypto.createHmac('md5', 'key');
+    crypto.createHmac('sha1', 'key');
+    const { createHash, createHmac } = crypto;
+    createHash('md5');
+    createHmac('sha1', 'key');
+
+    // Trigger no-restricted-syntax (rejectUnauthorized: false)
+    tls.connect({ host: 'example.com', rejectUnauthorized: false });
+    https.request('https://example.com', { rejectUnauthorized: false });
 
     // Trigger no-restricted-syntax (dynamic import)
     import(process.argv[2]);

@@ -137,6 +137,18 @@ module.exports = [
         },
         {
           selector:
+            "CallExpression:matches([callee.object.name='crypto'][callee.property.name=/^create(Hash|Hmac)$/], [callee.name=/^create(Hash|Hmac)$/])[arguments.0.value=/^(md5|sha1)$/i]",
+          message:
+            "MD5 and SHA-1 are cryptographically broken and should not be used for security-sensitive operations. Use SHA-256 or stronger algorithms.",
+        },
+        {
+          selector:
+            "Property:matches([key.name='rejectUnauthorized'], [key.value='rejectUnauthorized'])[value.value=false]",
+          message:
+            "Setting 'rejectUnauthorized' to false disables TLS certificate validation, making the connection vulnerable to Man-in-the-Middle (MITM) attacks.",
+        },
+        {
+          selector:
             "CallExpression:matches([callee.name=/^(spawn|spawnSync|fork|exec|execSync|execFile|execFileSync)$/], [callee.property.name=/^(spawn|spawnSync|fork|exec|execSync|execFile|execFileSync)$/], [callee.property.value=/^(spawn|spawnSync|fork|exec|execSync|execFile|execFileSync)$/])[arguments.0.type!='Literal']",
           message:
             "Using non-literal arguments with child_process methods can lead to command injection. Ensure all arguments are sanitized or use literal values.",
@@ -155,9 +167,9 @@ module.exports = [
         },
         {
           selector:
-            "CallExpression:matches([callee.name='fetch'], [callee.object.name=/^(http|https|node:http|node:https)$/][callee.property.name=/^(get|request)$/], [callee.object.name=/^(http|https|node:http|node:https)$/][callee.property.value=/^(get|request)$/])[arguments.0.type!='Literal']:not([arguments.0.type='TemplateLiteral'][arguments.0.expressions.length=0])",
+            "CallExpression:matches([callee.name='fetch'], [callee.object.name=/^(http|https|http2|node:http|node:https|node:http2)$/][callee.property.name=/^(get|request|connect)$/], [callee.object.name=/^(http|https|http2|node:http|node:https|node:http2)$/][callee.property.value=/^(get|request|connect)$/])[arguments.0.type!='Literal']:not([arguments.0.type='TemplateLiteral'][arguments.0.expressions.length=0])",
           message:
-            "Using non-literal arguments with fetch or http/https methods can lead to Server-Side Request Forgery (SSRF). Ensure all URLs are sanitized or use literal values.",
+            "Using non-literal arguments with fetch, http/https, or http2 methods can lead to Server-Side Request Forgery (SSRF). Ensure all URLs are sanitized or use literal values.",
         },
       ],
 

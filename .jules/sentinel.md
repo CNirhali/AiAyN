@@ -81,3 +81,9 @@
 **Vulnerability:** The existing ESLint rule for `child_process` only flagged `shell: true`, allowing bypasses via string paths (e.g., `shell: '/bin/bash'`), template literals, or truthy identifiers, all of which enable shell execution and increase command injection risk.
 **Learning:** Node.js `child_process` methods interpret any truthy value for the `shell` option as enabling a shell. Static analysis rules that only check for a specific boolean literal are insufficient for security enforcement.
 **Prevention:** Use the `:not([value.type='Literal'][value.value=false])` selector in `no-restricted-syntax` to flag any usage of the `shell` option that isn't explicitly set to `false`. This ensures that any attempt to enable the shell—whether via boolean, string path, or variable—is scrutinized. Additionally, when testing these rules, ensure template literals are properly escaped in the test strings.
+
+## 2025-03-05 - Modern Protocol Gaps in SSRF Protection
+
+**Vulnerability:** The existing SSRF protection rule only targeted `fetch` and the `http`/`https` modules, leaving newer protocols like `http2` (via `http2.connect()`) unmonitored.
+**Learning:** Security rules targeting network sinks must be regularly updated to include all available transport protocols in the environment. Modern Node.js applications frequently use `http2` for performance, which introduces a separate set of APIs for making requests.
+**Prevention:** When implementing SSRF protection via static analysis, ensure coverage for `http`, `https`, and `http2` (including their `node:` prefixed versions). Use broad selectors that target methods like `get`, `request`, and `connect` across all relevant built-in modules.
