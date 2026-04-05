@@ -107,6 +107,10 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     createHash('md5');
     createHmac('sha1', 'key');
 
+    // Computed property access for crypto
+    crypto['createHash']('md5');
+    crypto['createHmac']('sha1', 'key');
+
     // Trigger no-restricted-syntax (rejectUnauthorized: false)
     tls.connect({ host: 'example.com', rejectUnauthorized: false });
     https.request('https://example.com', { rejectUnauthorized: false });
@@ -123,9 +127,21 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     allocUnsafe(10);
     allocUnsafeSlow(10);
 
+    // Computed property access for Buffer
+    Buffer['allocUnsafe'](10);
+
     // Trigger no-restricted-syntax (insecure vm module)
     const vm = require('vm');
     const nodeVm = require('node:vm');
+    const v8 = require('v8');
+    const nodeV8 = require('node:v8');
+
+    // Trigger v8 insecure methods
+    v8.deserialize(Buffer.from('...'));
+    v8.getHeapSnapshot();
+    v8.setFlagsFromString('--trace-gc');
+    const { deserialize } = require('v8');
+    deserialize(Buffer.from('...'));
 
     // Trigger no-restricted-syntax (deprecated crypto)
     crypto.createCipher('aes-128-cbc', 'password');
@@ -133,6 +149,7 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     const { createCipher, createDecipher } = crypto;
     createCipher('aes-128-cbc', 'password');
     createDecipher('aes-128-cbc', 'password');
+    crypto['createCipher']('aes-128-cbc', 'password');
 
     // Trigger detect-disable-mustache-escape
     const obj2 = {};

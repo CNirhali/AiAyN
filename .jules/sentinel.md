@@ -87,3 +87,9 @@
 **Vulnerability:** The existing SSRF protection rule only targeted `fetch` and the `http`/`https` modules, leaving newer protocols like `http2` (via `http2.connect()`) unmonitored.
 **Learning:** Security rules targeting network sinks must be regularly updated to include all available transport protocols in the environment. Modern Node.js applications frequently use `http2` for performance, which introduces a separate set of APIs for making requests.
 **Prevention:** When implementing SSRF protection via static analysis, ensure coverage for `http`, `https`, and `http2` (including their `node:` prefixed versions). Use broad selectors that target methods like `get`, `request`, and `connect` across all relevant built-in modules.
+
+## 2025-03-05 - ESLint Selector Bypasses via Computed Properties
+
+**Vulnerability:** Security linting rules targeting specific methods (e.g., `crypto.createHash`) can be bypassed by using computed property access with bracket notation (e.g., `crypto['createHash']('md5')`). Standard `MemberExpression` selectors often only check `property.name` (Identifiers), missing `property.value` (Literals).
+**Learning:** Node.js allows accessing any object property via string literals in brackets. If a security rule only monitors dot notation, it creates a significant bypass vector that is easy to exploit.
+**Prevention:** When defining `no-restricted-syntax` rules for property access, use `:matches([callee.property.name='...'], [callee.property.value='...'])` to catch both dot and bracket notation. This ensures that dangerous sinks are blocked regardless of how they are invoked.

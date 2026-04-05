@@ -108,7 +108,7 @@ module.exports = [
         },
         {
           selector:
-            "CallExpression:matches([callee.object.name='Buffer'][callee.property.name=/^allocUnsafe(Slow)?$/], [callee.name='allocUnsafe'], [callee.name='allocUnsafeSlow'])",
+            "CallExpression:matches([callee.object.name='Buffer']:matches([callee.property.name=/^allocUnsafe(Slow)?$/], [callee.property.value=/^allocUnsafe(Slow)?$/]), [callee.name='allocUnsafe'], [callee.name='allocUnsafeSlow'])",
           message:
             "Use Buffer.alloc() instead of Buffer.allocUnsafe() to ensure memory is zero-filled and prevent information leakage.",
         },
@@ -120,24 +120,30 @@ module.exports = [
         },
         {
           selector:
-            "CallExpression[callee.name='require'][arguments.0.value=/^(node:)?vm$/]",
+            "CallExpression[callee.name='require'][arguments.0.value=/^(node:)?(vm|v8)$/]",
           message:
-            'The "vm" module is not a secure sandbox. Use "isolated-vm" or a separate process for untrusted code execution.',
-        },
-        {
-          selector: "ImportDeclaration[source.value=/^(node:)?vm$/]",
-          message:
-            'The "vm" module is not a secure sandbox. Use "isolated-vm" or a separate process for untrusted code execution.',
+            'The "vm" and "v8" modules can be dangerous. Use "isolated-vm" for untrusted code, and avoid insecure "v8" methods like deserialize().',
         },
         {
           selector:
-            "CallExpression:matches([callee.object.name='crypto'][callee.property.name=/^create(De)?cipher$/], [callee.name='createCipher'], [callee.name='createDecipher'])",
+            "CallExpression:matches([callee.object.name='v8']:matches([callee.property.name=/^(deserialize|getHeapSnapshot|setFlagsFromString)$/], [callee.property.value=/^(deserialize|getHeapSnapshot|setFlagsFromString)$/]), [callee.name=/^(deserialize|getHeapSnapshot|setFlagsFromString)$/])",
+          message:
+            "v8.deserialize() is insecure and can lead to Remote Code Execution (RCE). v8.getHeapSnapshot() and v8.setFlagsFromString() also pose significant security risks.",
+        },
+        {
+          selector: "ImportDeclaration[source.value=/^(node:)?(vm|v8)$/]",
+          message:
+            'The "vm" and "v8" modules can be dangerous. Use "isolated-vm" for untrusted code, and avoid insecure "v8" methods like deserialize().',
+        },
+        {
+          selector:
+            "CallExpression:matches([callee.object.name='crypto']:matches([callee.property.name=/^create(De)?cipher$/], [callee.property.value=/^create(De)?cipher$/]), [callee.name='createCipher'], [callee.name='createDecipher'])",
           message:
             "crypto.createCipher() and crypto.createDecipher() are deprecated and use insecure key derivation. Use crypto.createCipheriv() or crypto.createDecipheriv() instead.",
         },
         {
           selector:
-            "CallExpression:matches([callee.object.name='crypto'][callee.property.name=/^create(Hash|Hmac)$/], [callee.name=/^create(Hash|Hmac)$/])[arguments.0.value=/^(md5|sha1)$/i]",
+            "CallExpression:matches([callee.object.name='crypto']:matches([callee.property.name=/^create(Hash|Hmac)$/], [callee.property.value=/^create(Hash|Hmac)$/]), [callee.name=/^create(Hash|Hmac)$/])[arguments.0.value=/^(md5|sha1)$/i]",
           message:
             "MD5 and SHA-1 are cryptographically broken and should not be used for security-sensitive operations. Use SHA-256 or stronger algorithms.",
         },
