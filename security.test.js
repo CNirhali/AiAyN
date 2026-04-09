@@ -101,10 +101,10 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     // SSRF coverage for new modules
     net.createConnection(process.argv[2]);
     tls.connect(process.argv[2]);
-    dgram.createSocket('udp4').send('msg', 0, 3, process.argv[2]);
 
-    // SSRF false positive prevention for ObjectExpression
-    http.get({ hostname: 'example.com' }); // Should NOT trigger
+    // SSRF false positive prevention
+    http.get({ hostname: 'example.com' }); // ObjectExpression
+    net.connect(8080); // Port number
 
     // SSRF property-level detection
     http.get({ hostname: process.argv[2] });

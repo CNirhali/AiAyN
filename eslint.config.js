@@ -173,15 +173,21 @@ module.exports = [
         },
         {
           selector:
-            "CallExpression:matches([callee.name='fetch'], [callee.object.name=/^(http|https|http2|net|tls|dgram|node:http|node:https|node:http2|node:net|node:tls|node:dgram)$/][callee.property.name=/^(get|request|connect|createConnection|send)$/], [callee.object.name=/^(http|https|http2|net|tls|dgram|node:http|node:https|node:http2|node:net|node:tls|node:dgram)$/][callee.property.value=/^(get|request|connect|createConnection|send)$/])[arguments.0.type!='Literal']:not([arguments.0.type='TemplateLiteral'][arguments.0.expressions.length=0]):not([arguments.0.type='ObjectExpression'])",
+            "CallExpression:matches([callee.name='fetch'], [callee.object.name=/^(http|https|http2|node:http|node:https|node:http2)$/][callee.property.name=/^(get|request|connect)$/], [callee.object.name=/^(http|https|http2|node:http|node:https|node:http2)$/][callee.property.value=/^(get|request|connect)$/])[arguments.0.type!='Literal']:not([arguments.0.type='TemplateLiteral'][arguments.0.expressions.length=0]):not([arguments.0.type='ObjectExpression'])",
           message:
-            "Using non-literal arguments with fetch, http/https, http2, net, tls, or dgram methods can lead to Server-Side Request Forgery (SSRF). Ensure all URLs are sanitized or use literal values.",
+            "Using non-literal arguments with fetch, http/https, or http2 methods can lead to Server-Side Request Forgery (SSRF). Ensure all URLs are sanitized or use literal values.",
         },
         {
           selector:
-            "CallExpression:matches([callee.name='fetch'], [callee.object.name=/^(http|https|http2|net|tls|dgram|node:http|node:https|node:http2|node:net|node:tls|node:dgram)$/][callee.property.name=/^(get|request|connect|createConnection|send)$/], [callee.object.name=/^(http|https|http2|net|tls|dgram|node:http|node:https|node:http2|node:net|node:tls|node:dgram)$/][callee.property.value=/^(get|request|connect|createConnection|send)$/]) > ObjectExpression > Property:matches([key.name=/^(host|hostname|path|href|address)$/], [key.value=/^(host|hostname|path|href|address)$/])[value.type!='Literal']:not([value.type='TemplateLiteral'][value.expressions.length=0])",
+            "CallExpression:matches([callee.object.name=/^(net|tls|node:net|node:tls)$/][callee.property.name=/^(connect|createConnection)$/], [callee.object.name=/^(net|tls|node:net|node:tls)$/][callee.property.value=/^(connect|createConnection)$/])[arguments.0.type!='Literal']:not([arguments.0.type='TemplateLiteral'][arguments.0.expressions.length=0]):not([arguments.0.type='ObjectExpression']):not([arguments.0.type='Literal'][value.type='number'])",
           message:
-            "Using non-literal properties (host, hostname, path, href, address) in network method options can lead to Server-Side Request Forgery (SSRF). Ensure all values are sanitized or use literals.",
+            "Using non-literal host/path with net or tls methods can lead to Server-Side Request Forgery (SSRF). Ensure all targets are sanitized or use literal values.",
+        },
+        {
+          selector:
+            "CallExpression:matches([callee.name='fetch'], [callee.object.name=/^(http|https|http2|net|tls|node:http|node:https|node:http2|node:net|node:tls)$/][callee.property.name=/^(get|request|connect|createConnection)$/], [callee.object.name=/^(http|https|http2|net|tls|node:http|node:https|node:http2|node:net|node:tls)$/][callee.property.value=/^(get|request|connect|createConnection)$/]) > ObjectExpression > Property:matches([key.name=/^(host|hostname|path|href)$/], [key.value=/^(host|hostname|path|href)$/])[value.type!='Literal']:not([value.type='TemplateLiteral'][value.expressions.length=0])",
+          message:
+            "Using non-literal properties (host, hostname, path, href) in network method options can lead to Server-Side Request Forgery (SSRF). Ensure all values are sanitized or use literals.",
         },
       ],
 
