@@ -88,6 +88,12 @@
 **Learning:** Security rules targeting network sinks must be regularly updated to include all available transport protocols in the environment. Modern Node.js applications frequently use `http2` for performance, which introduces a separate set of APIs for making requests.
 **Prevention:** When implementing SSRF protection via static analysis, ensure coverage for `http`, `https`, and `http2` (including their `node:` prefixed versions). Use broad selectors that target methods like `get`, `request`, and `connect` across all relevant built-in modules.
 
+## 2025-03-05 - Safe Dependency Hardening vs. Major Regressions
+
+**Vulnerability:** Transitive dependencies like `vite` can introduce critical vulnerabilities (e.g., GHSA-p9ff-h696-f583 arbitrary file read) even if not directly used in production.
+**Learning:** Automatically upgrading to the "latest" major version to fix a security issue can introduce massive regressions (e.g., switching from Rollup to Rolldown in Vite 8) and violate "ask first" constraints for breaking changes.
+**Prevention:** Always target the minimum safe version (patch/minor) that resolves the vulnerability. Use `pnpm.overrides` to pin secure versions and verify with `pnpm audit` without jumping across major version boundaries unless absolutely necessary and approved.
+
 ## 2025-03-05 - ESLint Selector Bypasses via Computed Properties
 
 **Vulnerability:** Security linting rules targeting specific methods (e.g., `crypto.createHash`) can be bypassed by using computed property access with bracket notation (e.g., `crypto['createHash']('md5')`). Standard `MemberExpression` selectors often only check `property.name` (Identifiers), missing `property.value` (Literals).
