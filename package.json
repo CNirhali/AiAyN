@@ -30,12 +30,14 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.2.5",
+    "vite": "7.3.2",
     "vitest": "^4.1.2"
   },
   "pnpm": {
     "overrides": {
       "flatted": ">=3.4.2",
       "picomatch": ">=4.0.4",
+      "vite": ">=7.3.2",
       "yaml": ">=2.8.3"
     }
   }
