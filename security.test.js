@@ -98,6 +98,20 @@ test("ESLint should catch critical security vulnerabilities as errors", async ()
     http['get'](process.argv[2]);
     fetch(\`https://example.com\`); // Safe TemplateLiteral, should NOT trigger
 
+    // SSRF coverage for new modules
+    net.createConnection(process.argv[2]);
+    tls.connect(process.argv[2]);
+    dgram.createSocket('udp4').send('msg', 0, 3, process.argv[2]);
+
+    // SSRF false positive prevention for ObjectExpression
+    http.get({ hostname: 'example.com' }); // Should NOT trigger
+
+    // SSRF property-level detection
+    http.get({ hostname: process.argv[2] });
+    net.connect({ host: process.argv[2] });
+    tls.connect({ host: process.argv[2], port: 443 });
+    http.request({ path: process.argv[2] });
+
     // Trigger no-restricted-syntax (insecure hashing)
     crypto.createHash('md5');
     crypto.createHash('sha1');
