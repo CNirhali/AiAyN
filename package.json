@@ -1,0 +1,43 @@
+{
+  "name": "aiayn",
+  "version": "1.0.0",
+  "description": "Security-hardened repository foundation",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "audit": "pnpm audit",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,ts,cjs,mjs}": [
+      "eslint --fix",
+      "vitest run --related --passWithNoTests"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "eslint-plugin-security": "^4.0.0",
+    "globals": "^17.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.2.5",
+    "vitest": "^4.1.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "flatted": ">=3.4.2",
+      "picomatch": ">=4.0.4",
+      "yaml": ">=2.8.3",
+      "vite": ">=7.3.2"
+    }
+  }
+}
